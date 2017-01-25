@@ -1,0 +1,109 @@
+<html>
+	<head>
+		<script src="js/react.js"></script>
+		<script src="js/react-dom.js"></script>
+		<script src="js/browser.min.js"></script>
+		<script src="js/react-input-range.js"></script>
+		<script src="js/browser-polyfill.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/style.css">	
+		<link rel="stylesheet" type="text/css" href="css/react-input-range.css">
+	</head>
+	<body>  
+		<div id="app"></div>
+  	
+			<script type="text/babel">
+			
+			var  i:'';
+			var count:0;
+			class App extends React.Component {
+			constructor(props)
+			{
+			    super(props);
+			    this.state = {
+			      value: 0,
+			      Checked: false,
+			      img :'images/0.jpg'
+			    };
+			    this.change=this.change.bind(this);
+			    this.handleValueChange=this.handleValueChange.bind(this);
+			}
+			      
+			change()
+			{
+        		this.setState({
+        		Checked: !this.state.Checked
+        		});
+
+        		if(this.state.Checked)
+        		{
+        		 	clearInterval(i);
+        		 	this.handleValueChange(0,0);
+        		}
+        		else
+        		{
+        			this.setState({ img :'images/0.jpg' });
+        		}
+    		}
+
+			handleValueChange(component, value)
+			{
+			    this.setState({
+				value: value,
+				});
+					    
+				if(this.state.Checked)
+				{
+				   	if(value==0)
+				    {
+				    	clearInterval(i);
+				  		this.setState({img:'images/0.jpg'});
+				    }
+					else
+					{
+					   	clearInterval(i);
+						count= 0;
+						i = setInterval(function(){
+						this.setState({img:'images/'+count+'.jpg'});
+					    count++;
+					    if(count==13) 
+					    {
+					       count=0;	
+					    }
+						}.bind(this),100-value);
+					}
+				}
+				else
+				{
+					clearInterval(i);
+					this.setState({img:'images/0.jpg'});
+				}
+		    }
+
+			render() { 
+			    return(
+			      <form className="form">
+			        <div>
+				        <center> <h2> <input onChange={this.change} id={this.id} type="checkbox" checked={this.state.Checked} />
+	                	<label htmlFor={this.id}> REACT RUN </label> </h2> </center>
+				        <br/>			          
+				        <InputRange  maxValue={100} minValue={0} value={this.state.value} onChange={this.handleValueChange.bind(this)} />
+				        <br/><br/>
+				        <div id="clouds" >
+							<div class="cloud" id="x1"></div>
+							<div class="cloud" id="x2"></div>
+						</div>    
+				     	<img src={this.state.img} width="100%" height="400"/>
+			     	</div>
+			      </form>
+			    );
+			  }
+			}
+
+			ReactDOM.render(
+			  <App />,
+			  document.getElementById('app')
+			);
+			
+		</script>
+	</body>
+</html>
